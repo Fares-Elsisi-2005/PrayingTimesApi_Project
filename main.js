@@ -13,6 +13,9 @@ let selectValueEl = document.getElementById("selection");
 
 
 /* start doing the city menu */
+
+ 
+
 let cities = [
     {
         arName:"القاهرة",
@@ -50,7 +53,7 @@ cities.forEach(citiy => {
 /* end doing the city menu */
 
 
-
+getPrayData(selectValueEl.value)
 
 selectValueEl.addEventListener("change", function () {
     //Change title
@@ -82,7 +85,7 @@ function renderdata(response) {
     })
     let listofPrayingsValues = Object.values(response.data.data.timings).slice(0, 7);
     prayingTimesEl.forEach((prTime, indx) => {
-        prTime.innerText =  listofPrayingsValues[indx]
+        prTime.innerText = convertToAM( listofPrayingsValues[indx])
     })
 
 
@@ -92,26 +95,16 @@ function renderdata(response) {
 
  
 
-async function printname( ) {
-    await new Promise((resolve, reject) => {
-        setTimeout(() => {
-
-            console.log("fares");
-            resolve()
-
-            
-        },1000)
-    })
-    await new Promise((resolve, reject) => {
-        setTimeout(() => {
-            console.log("sama");
-            resolve()
-
-        },1000)
-    })
-    setTimeout(() => {
-        console.log("roaa");
-    },1000)
+// convert time to am
+function convertToAM(timeStr) {
+    let [hours, minutes] = timeStr.split(':');
+    hours = parseInt(hours);
+    
+    // Only subtract 12 if time is in PM (13:00 or later)
+    if (hours >= 13) {
+        hours -= 12;
+    }
+    
+    // Keep hours as is if already in AM (00:00 to 12:59)
+    return `${hours.toString().padStart(2, '0')}:${minutes}`;
 }
-
- 
