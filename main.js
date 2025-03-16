@@ -1,0 +1,117 @@
+// city tile
+let CityTitleEl = document.getElementById("cityTitle");
+// date
+let dayEl = document.getElementById("day");
+let monthEl = document.getElementById("month");
+let dateEl = document.getElementById("date");
+//cards data
+let prayingNamesEl = document.querySelectorAll(".prayingName");
+let prayingTimesEl = document.querySelectorAll(".praingTime");
+
+// selection
+let selectValueEl = document.getElementById("selection");
+
+
+/* start doing the city menu */
+let cities = [
+    {
+        arName:"القاهرة",
+        enName:"Cairo"
+    },
+    
+    {
+        arName:"دمياط",
+        enName:"Damietta"
+    },
+    {
+        arName:"جيزه",
+        enName:"Giza "
+    },
+    {
+        arName:"سوهاج",
+        enName:"Sohag"
+    },
+    {
+        arName:"لوقصر",
+        enName:"Luxor"
+    },
+
+]
+
+cities.forEach(citiy => {
+    let option = document.createElement("option")
+    option.innerText = citiy.arName;
+    option.value = citiy.enName;
+     
+    selectValueEl.appendChild(option)
+
+    
+})
+/* end doing the city menu */
+
+
+
+
+selectValueEl.addEventListener("change", function () {
+    //Change title
+    CityTitleEl.innerText = selectValueEl.value;
+    //change data
+    getPrayData(selectValueEl.value)
+    
+})
+
+/* stat general function */
+function getPrayData(city) {
+    axios.get(`https://api.aladhan.com/v1/timingsByCity?country=EG&city=${city}`)
+        .then((response) => {
+           
+            renderdata(response);
+        })
+}
+ 
+function renderdata(response) {
+    //head data
+    dayEl.innerText = response.data.data.date.gregorian.weekday.en;
+    monthEl.innerText = response.data.data.date.gregorian.month.en;
+    dateEl.innerText = response.data.data.date.gregorian.date;
+    //card data
+    let listofPrayings = Object.keys(response.data.data.timings).slice(0, 7);
+    prayingNamesEl.forEach((prayName ,indx) => {
+        prayName.innerText = listofPrayings[indx];
+        
+    })
+    let listofPrayingsValues = Object.values(response.data.data.timings).slice(0, 7);
+    prayingTimesEl.forEach((prTime, indx) => {
+        prTime.innerText =  listofPrayingsValues[indx]
+    })
+
+
+}
+
+/* end general function */
+
+ 
+
+async function printname( ) {
+    await new Promise((resolve, reject) => {
+        setTimeout(() => {
+
+            console.log("fares");
+            resolve()
+
+            
+        },1000)
+    })
+    await new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log("sama");
+            resolve()
+
+        },1000)
+    })
+    setTimeout(() => {
+        console.log("roaa");
+    },1000)
+}
+
+ 
